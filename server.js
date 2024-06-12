@@ -1,8 +1,9 @@
 let express = require("express");
-let mongoose = require("mongoose");
 let db  = require("./db");
 let bodyParser = require("body-parser");
-let TodoModule  =  require("./modules/todoListSchema");
+require('dotenv').config();
+let PersonRouter =  require('./Routers/PersonRouters');
+
 
 let app = express();
 app.use(bodyParser.json());
@@ -11,28 +12,11 @@ app.get("/", (req, res) => {
   res.send("Welcome to Todo | App");
 });
 
-app.post("/todo", async(req, res) => {
-  try {
-        let todo =  new TodoModule(req.body);
-        let response  = await todo.save();
-        console.log("Todo has been Saved!!" , response);
-        res.status(200).json(response);
-  } catch (error) {
-        console.log(error);
-        res.status(500).json({error: error.mesasge});    
-  }
-});
-app.get("/todo", async(req, res) => {
-  try {
-    let todos =  await TodoModule.find()
-        res.status(200).send(todos);
-  } catch (error) {
-        console.log(error);
-        res.status(500).json({error: error.mesasge});    
-  }
-});
+app.use('/todo',PersonRouter)
 
-let PORT = 3000;
+
+
+let PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });

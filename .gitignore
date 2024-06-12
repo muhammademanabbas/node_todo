@@ -1,0 +1,4 @@
+# node module didn't track
+
+node_modules/
+.env
